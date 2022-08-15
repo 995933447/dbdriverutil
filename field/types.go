@@ -2,6 +2,7 @@ package field
 
 import (
 	"database/sql/driver"
+	"encoding/json"
 	"strconv"
 	"strings"
 )
@@ -52,5 +53,18 @@ func (s *Strings) Scan(src interface{}) error {
 	str := strings.TrimRight(src.(string), "]")
 	str = strings.TrimLeft(str, "[")
 	*s = strings.Split(str, ",")
+	return nil
+}
+
+type Json []byte
+
+func (j Json) Value() (driver.Value, error) {
+	return string(j), nil
+}
+
+func (j *Json) Scan(src interface{}) error {
+	if err := json.Unmarshal([]byte(src.(string)), j); err != nil {
+		return err
+	}
 	return nil
 }
