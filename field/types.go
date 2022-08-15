@@ -1,10 +1,7 @@
 package field
 
 import (
-	"bytes"
 	"database/sql/driver"
-	"errors"
-	"encoding/json"
 	"strconv"
 	"strings"
 )
@@ -55,24 +52,5 @@ func (s *Strings) Scan(src interface{}) error {
 	str := strings.TrimRight(src.(string), "]")
 	str = strings.TrimLeft(str, "[")
 	*s = strings.Split(str, ",")
-	return nil
-}
-
-type Json []byte
-
-func (j Json) Value() (driver.Value, error) {
-	return string(j), nil
-}
-
-func (j *Json) Scan(value interface{}) error {
-	if value == nil {
-		*j = nil
-		return nil
-	}
-	s, ok := value.([]byte)
-	if !ok {
-		return errors.New("invalid scan source")
-	}
-	*j = append((*j)[:], s...)
 	return nil
 }
