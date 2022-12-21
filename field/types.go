@@ -2,7 +2,6 @@ package field
 
 import (
 	"database/sql/driver"
-	"encoding/json"
 	"strconv"
 	"strings"
 )
@@ -63,8 +62,6 @@ func (j Json) Value() (driver.Value, error) {
 }
 
 func (j *Json) Scan(src interface{}) error {
-	if err := json.Unmarshal(src.([]byte), j); err != nil {
-		return err
-	}
+	*j = src.([]byte)
 	return nil
 }
