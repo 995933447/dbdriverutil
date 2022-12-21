@@ -63,7 +63,7 @@ func (j Json) Value() (driver.Value, error) {
 }
 
 func (j *Json) Scan(src interface{}) error {
-	if err := json.Unmarshal([]byte(src.(string)), j); err != nil {
+	if err := json.Unmarshal(src.([]byte), j); err != nil {
 		return err
 	}
 	return nil
